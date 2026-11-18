@@ -202,10 +202,6 @@ document.querySelectorAll('.next').forEach(btn => {
   btn.addEventListener('click', () => showPage(currentPage + 1));
 });
 
-});
-document.querySelectorAll('.page-nav .next').forEach(btn=>btn.addEventListener('click',()=>showPage(currentPage+1)));
-document.querySelectorAll('.page-nav .prev').forEach(btn=>btn.addEventListener('click',()=>showPage(currentPage-1)));
-
 let heartsStarted=false;
 function showerHearts(){
   if(heartsStarted)return;heartsStarted=true;
