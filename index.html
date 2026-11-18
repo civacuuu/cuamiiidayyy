@@ -105,10 +105,10 @@ footer{font-style:italic;color:var(--muted)}
 <section class="page" id="p3"><div class="inner">
  <div class="eyebrow">page 03 · little pieces of us</div><h2>Our memories</h2><p class="sub">A few moments I want to keep close. Replace these with your favorite photos together.</p>
  <div class="gallery">
-  <div class="photo"><div class="placeholder">Your favorite photo<br>goes here ♡</div><small>one of my favorite moments</small></div>
-  <div class="photo"><div class="placeholder">Add another<br>little memory</div><small>the moments I keep close</small></div>
-  <div class="photo"><div class="placeholder">A picture that<br>makes you smile</div><small>you, being you</small></div>
-  <div class="photo"><div class="placeholder">One more photo<br>of us</div><small>more memories to come</small></div>
+<div class="photo"><img src="foto1.jpg" alt="Our memory"><small>one of my favorite moments</small></div>
+<div class="photo"><img src="foto2.jpg" alt="Our memory"><small>the moments I keep close</small></div>
+<div class="photo"><img src="foto3.png" alt="Our memory"><small>you, being you</small></div>
+<div class="photo"><img src="foto4.jpg" alt="Our memory"><small>more memories to come</small></div>
  </div>
  <div class="nav"><button class="btn next">Next page →</button></div>
 </div></section>
@@ -152,36 +152,28 @@ footer{font-style:italic;color:var(--muted)}
 
 <script>
 // Original gentle instrumental melody made with Web Audio (no external song file).
-let audioCtx, master, musicTimer, noteIndex=0, isPlaying=false;
-const notes=[261.63,329.63,392.00,329.63,293.66,349.23,440.00,349.23,261.63,329.63,392.00,523.25,440.00,392.00,349.23,329.63];
-function playNote(freq,start,duration,volume){
-  const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
-  osc.type='sine';osc.frequency.value=freq;
-  gain.gain.setValueAtTime(0,start);
-  gain.gain.linearRampToValueAtTime(volume,start+.08);
-  gain.gain.exponentialRampToValueAtTime(.001,start+duration);
-  osc.connect(gain);gain.connect(master);osc.start(start);osc.stop(start+duration+.03);
-}
-function scheduleMusic(){
-  if(!isPlaying)return;
-  const now=audioCtx.currentTime,f=notes[noteIndex%notes.length];
-  playNote(f,now,1.15,.10);
-  if(noteIndex%4===0)playNote(f/2,now,1.8,.045);
-  noteIndex++;musicTimer=setTimeout(scheduleMusic,650);
-}
-async function startMusic(){
-  if(!audioCtx){
-    const AC=window.AudioContext||window.webkitAudioContext;
-    if(!AC)return;
-    audioCtx=new AC();master=audioCtx.createGain();master.gain.value=.55;master.connect(audioCtx.destination);
+let isPlaying = false;
+const birthdayMusic = new Audio('music.mp3');
+birthdayMusic.loop = true;
+
+async function startMusic() {
+  try {
+    await birthdayMusic.play();
+    isPlaying = true;
+    document.getElementById('musicBtn').textContent = '♫ Music playing';
+  } catch (error) {
+    document.getElementById('musicBtn').textContent = '♫ Play music';
   }
-  if(audioCtx.state==='suspended')await audioCtx.resume();
-  if(!isPlaying){isPlaying=true;scheduleMusic();}
-  document.getElementById('musicBtn').textContent='♫ Music playing';
 }
-document.getElementById('musicBtn').addEventListener('click',async()=>{
-  if(isPlaying){isPlaying=false;clearTimeout(musicTimer);document.getElementById('musicBtn').textContent='♫ Play music';}
-  else await startMusic();
+
+document.getElementById('musicBtn').addEventListener('click', async () => {
+  if (isPlaying) {
+    birthdayMusic.pause();
+    isPlaying = false;
+    document.getElementById('musicBtn').textContent = '♫ Play music';
+  } else {
+    await startMusic();
+  }
 });
 
 const pages=[...document.querySelectorAll('.page[data-page]')];
