@@ -176,16 +176,32 @@ document.getElementById('musicBtn').addEventListener('click', async () => {
   }
 });
 
-const pages=[...document.querySelectorAll('.page[data-page]')];
-let currentPage=0;
-function showPage(index){
-  currentPage=Math.max(0,Math.min(index,pages.length-1));
-  pages.forEach((page,i)=>page.classList.toggle('active',i===currentPage));
-  window.scrollTo({top:0,behavior:'smooth'});
+const pages = [...document.querySelectorAll('.page')];
+let currentPage = 0;
+
+function showPage(index) {
+  currentPage = Math.max(0, Math.min(index, pages.length - 1));
+
+  pages.forEach((page, i) => {
+    page.classList.toggle('active', i === currentPage);
+  });
+
+  document.querySelectorAll('.progress .dot').forEach((dot, i) => {
+    dot.classList.toggle('on', i === currentPage);
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-document.getElementById('startBtn').addEventListener('click',async()=>{
+
+document.getElementById('startBtn').addEventListener('click', async () => {
   await startMusic();
   showPage(1);
+});
+
+document.querySelectorAll('.next').forEach(btn => {
+  btn.addEventListener('click', () => showPage(currentPage + 1));
+});
+
 });
 document.querySelectorAll('.page-nav .next').forEach(btn=>btn.addEventListener('click',()=>showPage(currentPage+1)));
 document.querySelectorAll('.page-nav .prev').forEach(btn=>btn.addEventListener('click',()=>showPage(currentPage-1)));
